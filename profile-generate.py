@@ -16,7 +16,7 @@ FILES = (
 )
 
 
-def pull(origin):
+def pull(origin, directory):
     """
     Pulls from a remote repository and stores it in the directory.
     :param origin: URL of the remote git repository
@@ -25,12 +25,12 @@ def pull(origin):
     repo = None
 
     try:
-        os.mkdir(FOLDER)
+        os.mkdir(directory)
     except:
         pass
 
     try:
-        repo = git.Repo.clone_from(origin, FOLDER)
+        repo = git.Repo.clone_from(origin, directory)
     except git.exc.GitCommandError as exception:
         print("ERROR: Could not Clone from Repo. Exiting...")
         print(exception)
@@ -79,17 +79,14 @@ def replace_marker(filename, profilename, marker='PROFILE_NAME'):
 def main():
 
     argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
-    argumentparser.add_argument('--name', required=False, help='Name of the new profile')
+    argumentparser.add_argument('--name', required=True, help='Name of the new profile')
     args = argumentparser.parse_args()
     profilename = str(args.name)
-
-    # If no commandline argument was passed
-    if profilename is None:
-        profilename = input('Please input profile name: ')
+    foldername = profilename
 
     # Pulling the skeleton from git
     print("Cloning Puppet Profile Skeleton")
-    repo = pull('https://github.com/vision-it/vision-profile-skeleton')
+    repo = pull('https://github.com/vision-it/vision-profile-skeleton', foldername)
 
     # Setting the new url
     new_url = 'git@github.com:vision-it/' + profilename + '.git'
@@ -97,9 +94,9 @@ def main():
 
     # Changing the template marker in the files
     for f in FILES:
-        replace_marker(FOLDER + '/' + f, profilename)
+        replace_marker(foldername + '/' + f, profilename)
 
-    print("Skeleton cloned to " + FOLDER + "...")
+    print("Skeleton cloned to " + foldername + "...")
     sys.exit(0)
 
 if __name__ == '__main__':
