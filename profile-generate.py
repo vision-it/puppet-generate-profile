@@ -8,15 +8,19 @@ import git
 from argparse import ArgumentParser
 
 
-# TODO Dynamisch mit regex machen
+# TODO Dynamisch mit regex machen -.-
 FILES = (
     '.fixtures.yml',
     'manifests/init.pp',
     'metadata.json',
     'spec/acceptance/nodesets/default.yml',
-    'data/common.yaml'
+    'data/common.yaml',
+    'spec/acceptance/default_spec.rb',
+    'spec/classes/compile_spec.rb'
 )
 
+def create_filelist(grep):
+    pass
 
 def pull(origin, directory):
     """
@@ -94,6 +98,7 @@ def main():
     # Setting the new url
     new_url = 'git@github.com:vision-it/' + profilename + '.git'
     set_remote_url(repo, new_url)
+
 
     # Changing the template marker in the files
     for f in FILES:
