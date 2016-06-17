@@ -4,7 +4,7 @@ Clones the puppet-profile-skeleton and modifies some files to include the new pr
 
 ## Usage
 
-```python
+```bash
 python3 profile-generate.py --name vision_profilename
 ```
 
