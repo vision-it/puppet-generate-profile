@@ -11,7 +11,8 @@ from argparse import ArgumentParser
 FILES = (
     '.fixtures.yml',
     'manifests/init.pp',
-    'metadata.json'
+    'metadata.json',
+    'spec/acceptance/nodesets/default.yml'
 )
 
 
