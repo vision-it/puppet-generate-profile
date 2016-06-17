@@ -8,11 +8,13 @@ import git
 from argparse import ArgumentParser
 
 
+# TODO Dynamisch mit regex machen
 FILES = (
     '.fixtures.yml',
     'manifests/init.pp',
     'metadata.json',
-    'spec/acceptance/nodesets/default.yml'
+    'spec/acceptance/nodesets/default.yml',
+    'data/common.yaml'
 )
 
 
