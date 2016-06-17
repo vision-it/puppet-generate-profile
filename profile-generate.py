@@ -51,6 +51,8 @@ def set_remote_url(repo, new_url):
     :param new_url: New remote url of the repository
     """
 
+    new_url = str(new_url).replace('_','-')
+
     try:
         origin = repo.remotes.origin
         cw = origin.config_writer
