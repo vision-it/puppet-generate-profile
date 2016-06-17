@@ -8,7 +8,7 @@ import git
 from argparse import ArgumentParser
 
 
-# TODO Dynamisch mit regex machen -.-
+# TODO Dynamisch mit regex (grep -r) machen -.-
 FILES = (
     '.fixtures.yml',
     'manifests/init.pp',
@@ -91,7 +91,7 @@ def main():
     argumentparser.add_argument('--name', required=True, help='Name of the new profile')
     args = argumentparser.parse_args()
     profilename = str(args.name)
-    foldername = profilename
+    foldername = str(profilename).replace('_','-')
 
     # Pulling the skeleton from git
     print("Cloning Puppet Profile Skeleton...")
