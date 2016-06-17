@@ -7,8 +7,8 @@ import sys
 import git
 from argparse import ArgumentParser
 
-FOLDER = 'cloned-profile'
 
+FOLDER = 'cloned-profile'
 FILES = (
     '.fixtures.yml',
     'manifests/init.pp',
@@ -57,6 +57,13 @@ def set_remote_url(repo, new_url):
 
 
 def replace_marker(filename, profilename, marker='PROFILE_NAME'):
+    """
+    Changes a specifies marker in a filename to something else
+
+    :param filename: the filename which you want to change
+    :param profilename: The profile name to insert
+    :param marker: The marker which will be replaced. Default: PROFILE_NAME
+    """
 
     lines = []
 
@@ -81,6 +88,7 @@ def main():
         profilename = input('Please input profile name: ')
 
     # Pulling the skeleton from git
+    print("Cloning Puppet Profile Skeleton")
     repo = pull('https://github.com/vision-it/vision-profile-skeleton')
 
     # Setting the new url
@@ -91,6 +99,8 @@ def main():
     for f in FILES:
         replace_marker(FOLDER + '/' + f, profilename)
 
+    print("Skeleton cloned to " + FOLDER + "...")
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
