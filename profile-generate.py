@@ -8,7 +8,6 @@ import git
 from argparse import ArgumentParser
 
 
-FOLDER = 'cloned-profile'
 FILES = (
     '.fixtures.yml',
     'manifests/init.pp',
@@ -78,6 +77,7 @@ def replace_marker(filename, profilename, marker='PROFILE_NAME'):
 
 def main():
 
+    # Command line arguments
     argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
     argumentparser.add_argument('--name', required=True, help='Name of the new profile')
     args = argumentparser.parse_args()
@@ -85,7 +85,7 @@ def main():
     foldername = profilename
 
     # Pulling the skeleton from git
-    print("Cloning Puppet Profile Skeleton")
+    print("Cloning Puppet Profile Skeleton...")
     repo = pull('https://github.com/vision-it/vision-profile-skeleton', foldername)
 
     # Setting the new url
