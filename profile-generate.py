@@ -88,7 +88,7 @@ def main():
 
     # Command line arguments
     argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
-    argumentparser.add_argument('--name', required=True, help='Name of the new profile')
+    argumentparser.add_argument('--name', required=True, help='Name of the new profile. Like so: new_profile')
     args = argumentparser.parse_args()
     profilename = str(args.name)
     foldername = str(profilename).replace('_','-')
