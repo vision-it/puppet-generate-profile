@@ -64,13 +64,13 @@ def set_remote_url(repo, new_url):
         sys.exit(1)
 
 
-def replace_marker(filename, profilename, marker='PROFILE_NAME'):
+def replace_marker(filename, profilename, marker='vision_skeleton'):
     """
     Changes a specifies marker in a filename to something else
 
     :param filename: the filename which you want to change
     :param profilename: The profile name to insert
-    :param marker: The marker which will be replaced. Default: PROFILE_NAME
+    :param marker: The marker which will be replaced. Default: vision_skeleton
     """
 
     lines = []
@@ -95,7 +95,7 @@ def main():
 
     # Pulling the skeleton from git
     print("Cloning Puppet Profile Skeleton...")
-    repo = pull('https://github.com/vision-it/vision-profile-skeleton', foldername)
+    repo = pull('https://github.com/vision-it/vision-skeleton', foldername)
 
     # Setting the new url
     new_url = 'git@github.com:vision-it/' + profilename + '.git'
