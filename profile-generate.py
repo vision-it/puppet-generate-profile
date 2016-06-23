@@ -91,7 +91,7 @@ def main():
     argumentparser.add_argument('--name', required=True, help='Name of the new profile. Like so: new_profile')
     args = argumentparser.parse_args()
     profilename = str(args.name)
-    foldername = str(profilename).replace('_','-')
+    foldername = str(profilename)
 
     # Pulling the skeleton from git
     print("Cloning Puppet Profile Skeleton...")
