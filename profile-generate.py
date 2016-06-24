@@ -74,7 +74,7 @@ def replace_marker(filename, profilename, marker='skeleton'):
 
     :param filename: the filename which you want to change
     :param profilename: The profile name to insert
-    :param marker: The marker which will be replaced. Default: vision_skeleton
+    :param marker: The marker which will be replaced. Default: skeleton
     """
 
     lines = []
@@ -93,7 +93,7 @@ def main():
 
     # Command line arguments
     argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
-    argumentparser.add_argument('--name', required=True, help='Name of the new profile. Like so: new_profile')
+    argumentparser.add_argument('--name', required=True, help='Name of the new profile. Like so: mynewprofile')
     argumentparser.add_argument('--github', required=False, help='Name of the github repository')
     argumentparser.add_argument('--folder', required=False, help='Name of the local folder')
 
@@ -125,6 +125,8 @@ def main():
     # Changing the template marker in the files
     files = get_files(foldername)
     for f in files:
+        if profilename.startswith('vision_'):
+            profilename = re.sub('vision_', '', profilename)
         replace_marker(f, profilename)
 
 
