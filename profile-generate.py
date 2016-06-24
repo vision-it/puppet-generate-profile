@@ -68,7 +68,7 @@ def set_remote_url(repo, new_url):
         sys.exit(1)
 
 
-def replace_marker(filename, profilename, marker='vision_skeleton'):
+def replace_marker(filename, profilename, marker='skeleton'):
     """
     Changes a specifies marker in a filename to something else
 
