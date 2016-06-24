@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/vision-it/puppet-generate-profile.svg?branch=master)](https://travis-ci.org/vision-it/puppet-generate-profile)
+
 # Puppet Profile Generator
 
 Clones the puppet-profile-skeleton and modifies some files to include the new profile name.
