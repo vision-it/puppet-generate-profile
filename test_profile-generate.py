@@ -24,11 +24,13 @@ def tmpdir(request):
 @pytest.fixture
 def files(request):
 
-    # Assert for every file
+    # This will contain:
+    # Filename and expected value
     files = dict()
 
     # Underscore
-    #files['.git/config'] = r'vision-test'
+    # TODO Somehow this doesn't work. I don't know why
+    #files['.git/config'] = 'vision-test'
     #files['README.md'] = r'vision-test'
 
     # Dashes
@@ -49,8 +51,10 @@ def test_main(tmpdir, files):
     profilename = 'vision_test'
     foldername = tmpdir + '/vision-test'
 
+    # Execute main function from generator
     gen.main(profilename, foldername=foldername)
 
+    # Assert for every file
     for filename, expected in files.items():
         filename = os.path.join(tmpdir, profilename, filename)
         assert bool(re.search(expected, filename)) == True
