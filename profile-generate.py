@@ -5,19 +5,25 @@ import os
 import fileinput
 import sys
 import git
+import re
 from argparse import ArgumentParser
 
 
-# TODO Dynamisch mit regex (grep -r) machen -.-
-FILES = (
-    '.fixtures.yml',
-    'manifests/init.pp',
-    'metadata.json',
-    'spec/acceptance/nodesets/default.yml',
-    'data/common.yaml',
-    'spec/acceptance/default_spec.rb',
-    'spec/classes/compile_spec.rb'
-)
+def get_files(folder):
+    """
+    Gets all the files in the specified folder and returns a list.
+    :param folder: Name of the root folder
+    """
+
+    files = list()
+
+    for root, dirnames, filenames in os.walk(folder):
+        # Ignore all files in .git
+        if not re.search('git', root):
+            for f in filenames:
+                files.append(os.path.join(root,f))
+
+    return files
 
 
 def pull(origin, directory):
@@ -30,7 +36,7 @@ def pull(origin, directory):
 
     try:
         os.mkdir(directory)
-    except:
+    except FileExistsError:
         pass
 
     try:
@@ -92,6 +98,7 @@ def main():
     argumentparser.add_argument('--folder', required=False, help='Name of the local folder')
 
 
+    # Normalize the command line arguments
     args = argumentparser.parse_args()
     if args.github is None:
         args.github = args.name
@@ -116,8 +123,9 @@ def main():
 
 
     # Changing the template marker in the files
-    for f in FILES:
-        replace_marker(foldername + '/' + f, profilename)
+    files = get_files(foldername)
+    for f in files:
+        replace_marker(f, profilename)
 
 
     print("Skeleton cloned to " + foldername)
