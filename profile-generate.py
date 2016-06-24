@@ -100,6 +100,10 @@ def main():
 
     # Normalize the command line arguments
     args = argumentparser.parse_args()
+
+    if not str(args.name).startswith('vision_'):
+        args.name = 'vision_' + args.name
+
     if args.github is None:
         args.github = args.name
 
@@ -125,8 +129,6 @@ def main():
     # Changing the template marker in the files
     files = get_files(foldername)
     for f in files:
-        if profilename.startswith('vision_'):
-            profilename = re.sub('vision_', '', profilename)
         replace_marker(f, profilename)
 
 
