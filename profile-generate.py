@@ -134,7 +134,9 @@ def main(profilename, githubname=None, foldername=None):
             replace_marker(f, profilename)
 
 
-    print("Skeleton cloned to " + foldername)
+    print("Profile: " + profilename)
+    print("Skeleton cloned to: " + foldername)
+    print("Github origin name: " + new_url)
 
 
 if __name__ == '__main__':
