@@ -14,4 +14,9 @@ $ pip3 install -r requirements.txt
 $ python3 profile-generate.py --name vision_profilename
 ```
 
-The modified profile can be found in the *cloned-profile* folder.
+You can also specify the name of the local folder and the name of the repository: 
+
+```bash
+$ python3 profile-generate.py --name vision_profilename --github vision-othername --folder myfolder
+```
+
