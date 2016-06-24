@@ -1,5 +1,6 @@
-# Final publish location for module build
-/*
+#Python
+.cache/
+__pycache__/
 
 # VIM files
 *.swp

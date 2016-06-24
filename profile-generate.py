@@ -88,32 +88,30 @@ def replace_marker(filename, profilename, marker='skeleton'):
         for line in lines:
             outfile.write(line)
 
-def main():
 
+def commandline():
 
     # Command line arguments
     argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
-    argumentparser.add_argument('--name', required=True, help='Name of the new profile. Like so: mynewprofile')
+    argumentparser.add_argument('--name', required=True, help='Name of the new profile.')
     argumentparser.add_argument('--github', required=False, help='Name of the github repository')
     argumentparser.add_argument('--folder', required=False, help='Name of the local folder')
 
-
-    # Normalize the command line arguments
     args = argumentparser.parse_args()
 
-    if not str(args.name).startswith('vision_'):
-        args.name = 'vision_' + args.name
-
-    if args.github is None:
-        args.github = args.name
-
-    if args.folder is None:
-        args.folder = args.name
+    return (args.name, args.github, args.folder)
 
 
-    profilename = str(args.name)
-    githubname = str(args.github)
-    foldername = str(args.folder)
+def main(profilename, githubname=None, foldername=None):
+
+    # Normalize the command line arguments
+    profilename_without_prefix = re.sub('vision_', '', profilename)
+
+    if githubname is None:
+        githubname = profilename.replace('_', '-')
+
+    if foldername is None:
+        foldername = profilename.replace('_', '-')
 
 
     # Pulling the skeleton from git
@@ -129,12 +127,16 @@ def main():
     # Changing the template marker in the files
     files = get_files(foldername)
     for f in files:
-        replace_marker(f, profilename)
+        # This sucks and needs to
+        if str(f).endswith('README.md'):
+            replace_marker(f, profilename_without_prefix)
+        else:
+            replace_marker(f, profilename)
 
 
     print("Skeleton cloned to " + foldername)
-    sys.exit(0)
 
 
 if __name__ == '__main__':
-    main()
+    name, gitname, folder = commandline()
+    main(name, gitname, folder)
