@@ -19,8 +19,6 @@ FILES = (
     'spec/classes/compile_spec.rb'
 )
 
-def create_filelist(grep):
-    pass
 
 def pull(origin, directory):
     """
@@ -86,19 +84,34 @@ def replace_marker(filename, profilename, marker='vision_skeleton'):
 
 def main():
 
+
     # Command line arguments
     argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
     argumentparser.add_argument('--name', required=True, help='Name of the new profile. Like so: new_profile')
+    argumentparser.add_argument('--github', required=False, help='Name of the github repository')
+    argumentparser.add_argument('--folder', required=False, help='Name of the local folder')
+
+
     args = argumentparser.parse_args()
+    if args.github is None:
+        args.github = args.name
+
+    if args.folder is None:
+        args.folder = args.name
+
+
     profilename = str(args.name)
-    foldername = str(profilename)
+    githubname = str(args.github)
+    foldername = str(args.folder)
+
 
     # Pulling the skeleton from git
     print("Cloning Puppet Profile Skeleton...")
     repo = pull('https://github.com/vision-it/vision-skeleton', foldername)
 
+
     # Setting the new url
-    new_url = 'git@github.com:vision-it/' + profilename + '.git'
+    new_url = 'git@github.com:vision-it/' + githubname + '.git'
     set_remote_url(repo, new_url)
 
 
@@ -106,8 +119,10 @@ def main():
     for f in FILES:
         replace_marker(foldername + '/' + f, profilename)
 
-    print("Skeleton cloned to " + foldername + "...")
+
+    print("Skeleton cloned to " + foldername)
     sys.exit(0)
+
 
 if __name__ == '__main__':
     main()
