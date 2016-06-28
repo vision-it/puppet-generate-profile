@@ -127,11 +127,7 @@ def main(profilename, githubname=None, foldername=None):
     # Changing the template marker in the files
     files = get_files(foldername)
     for f in files:
-        # This sucks and needs to
-        if str(f).endswith('README.md'):
-            replace_marker(f, profilename_without_prefix)
-        else:
-            replace_marker(f, profilename)
+        replace_marker(f, profilename_without_prefix)
 
 
     print("Profile: " + profilename)
