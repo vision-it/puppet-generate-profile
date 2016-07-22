@@ -19,7 +19,7 @@ def get_files(folder):
 
     for root, dirnames, filenames in os.walk(folder):
         # Ignore all files in .git
-        if not re.search('git', root):
+        if not re.search('\.git', root):
             for f in filenames:
                 files.append(os.path.join(root,f))
 
