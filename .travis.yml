@@ -1,11 +1,12 @@
 language: python
 python:
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.5-dev" # 3.5 development branch
-  - "nightly" # currently points to 3.6-dev
-# command to install dependencies
-install: "pip install -r requirements.txt"
-# command to run tests
+- '3.3'
+- '3.4'
+- '3.5'
+- 3.5-dev
+- nightly
+install: pip install -r requirements.txt
 script: py.test
+notifications:
+  slack:
+    secure: lZCN9s+RXJvvIT68TwTa9pKS5cHQXLhHifH8iLMiuipplkSYhAeP7ch6t+78v5CJhQ/yl+26OhfpxCqJo1QzJoEYt/9DlQAp5hRil2eaN0tUDHllHhI9xbUYXkmC0ozvSFILn2FHK19A1sSqCH2ckW4cFSk9w5IDfZajtlIEWy9INdJMwKtyPCIiGp9PsCJfanjFHrn6CBnzyhWu79abaKQI/uiHcZewpapjMNMpEd0jyB0v2e+niP2MIZ8rgMS1wNuvPDwDb3F6D26mwfqUloSjpjEDfd20edHvz24knQImBi8uqMyeZwIpLJn1NMq1zYScpdoT9zzQGAUjvuAy/B6t7pmIGhwdGCsUvzKkqpVBf3EvUX9kSYkCqaUGXK1OUar+39FN6s9UpX4mIf+bPMF9DqSD57CbD6uhjLLvIdr32v6U2PAlK2SjoJLmXbAgXwmwySRiTT8u70FAan72751Drr16jF4iFy4vfQgQPR4+WXkGiKA0U/69cxIKs75YzRqXo3TKQ+d/6uYgS7vIu5xB5vnEKzeHXvHqNbBdrtJ1NdoZM677cnUWrcVGyMBDwthAli0BRdtoXqFCGPbUa5OszJ59fZKNDP6gmP9Ay8VQCEOMwMKKpCMVG10ID7R3JMKm1pHYfoOATpZeY06m/M3sluMel7kRvInSpVgdB2Q=
