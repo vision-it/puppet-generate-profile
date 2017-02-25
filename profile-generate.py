@@ -6,6 +6,7 @@ import fileinput
 import sys
 import git
 import re
+import shutil
 from argparse import ArgumentParser
 
 
@@ -118,11 +119,18 @@ def main(profilename, githubname=None, foldername=None):
     print("Cloning Puppet Profile Skeleton...")
     repo = pull('https://github.com/vision-it/vision-skeleton', foldername)
 
+    repo_git_path = os.path.join(os.getcwd() ,foldername, '.git')
+    remote_url = 'git@github.com:vision-it/' + githubname + '.git'
 
-    # Setting the new url
-    new_url = 'git@github.com:vision-it/' + githubname + '.git'
-    set_remote_url(repo, new_url)
+    # Remove git path to remove previous commits
+    shutil.rmtree(repo_git_path)
 
+    # Init and checkout branch
+    git.Repo.init(os.path.join(os.getcwd(), foldername), bare=False)
+    repo.git.checkout(b="development")
+
+    # Add remove
+    repo.git.remote('add', 'origin', remote_url)
 
     # Changing the template marker in the files
     files = get_files(foldername)
@@ -132,7 +140,7 @@ def main(profilename, githubname=None, foldername=None):
 
     print("Profile: " + profilename)
     print("Skeleton cloned to: " + foldername)
-    print("Github origin name: " + new_url)
+    print("Github origin name: " + remote_url)
 
 
 if __name__ == '__main__':
