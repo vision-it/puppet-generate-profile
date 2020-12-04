@@ -1,72 +1,31 @@
 #!/usr/bin/env python3
 
+"""
+Uses the vision-skeleton Puppet Profile to generate a new Puppet Profile with the given name.
+"""
 
 import os
-import fileinput
-import sys
-import git
+import subprocess
 import re
 import shutil
 from argparse import ArgumentParser
 
 
-def get_files(folder):
+def get_files(directoryname):
     """
     Gets all the files in the specified folder and returns a list.
-    :param folder: Name of the root folder
+    :param directoryname: Name of the root folder.
     """
 
     files = list()
 
-    for root, dirnames, filenames in os.walk(folder):
+    for root, _ , filenames in os.walk(directoryname):
         # Ignore all files in .git
-        if not re.search('\.git', root):
-            for f in filenames:
-                files.append(os.path.join(root,f))
+        if not re.search(r'\.git', root):
+            for _files in filenames:
+                files.append(os.path.join(root, _files))
 
     return files
-
-
-def pull(origin, directory):
-    """
-    Pulls from a remote repository and stores it in the directory.
-    :param origin: URL of the remote git repository
-    """
-
-    repo = None
-
-    try:
-        os.mkdir(directory)
-    except FileExistsError:
-        pass
-
-    try:
-        repo = git.Repo.clone_from(origin, directory)
-    except git.exc.GitCommandError as exception:
-        print("ERROR: Could not Clone from Repo. Exiting...")
-        print(exception)
-        sys.exit(1)
-
-    return repo
-
-
-def set_remote_url(repo, new_url):
-    """
-    Changes the target url of the previously pulled repo.
-    :param new_url: New remote url of the repository
-    """
-
-    new_url = str(new_url).replace('_','-')
-
-    try:
-        origin = repo.remotes.origin
-        cw = origin.config_writer
-        cw.set("url", new_url)
-        cw.release()
-    except git.exc.GitCommandError as exception:
-        print("ERROR: Could not change Remote URL")
-        print(exception)
-        sys.exit(1)
 
 
 def replace_marker(filename, profilename, marker='skeleton'):
@@ -91,19 +50,30 @@ def replace_marker(filename, profilename, marker='skeleton'):
 
 
 def commandline():
+    """
+    Setup for CLI
+    """
 
     # Command line arguments
-    argumentparser = ArgumentParser(description='Pulls the skeleton-profile from git and fills templates')
-    argumentparser.add_argument('--name', required=True, help='Name of the new profile.')
-    argumentparser.add_argument('--github', required=False, help='Name of the github repository')
-    argumentparser.add_argument('--folder', required=False, help='Name of the local folder')
+    argumentparser = ArgumentParser(
+        description='Pulls the visio-skeleton Profile from git and prepares a new Profile'
+    )
+    argumentparser.add_argument('--name', required=True,
+                                help='Name of the new profile')
+    argumentparser.add_argument('--github', required=False,
+                                help='URL of the new GitHub repository')
+    argumentparser.add_argument('--directory', required=False,
+                                help='Name of the new local directory')
 
     args = argumentparser.parse_args()
 
-    return (args.name, args.github, args.folder)
+    return (args.name, args.github, args.directory)
 
 
-def main(profilename, githubname=None, foldername=None):
+def main(profilename, githubname=None, directoryname=None):
+    """
+    Entrypoint
+    """
 
     # Normalize the command line arguments
     profilename_without_prefix = re.sub('vision_', '', profilename)
@@ -111,38 +81,38 @@ def main(profilename, githubname=None, foldername=None):
     if githubname is None:
         githubname = profilename.replace('_', '-')
 
-    if foldername is None:
-        foldername = profilename.replace('_', '-')
+    if directoryname is None:
+        directoryname = profilename.replace('_', '-')
 
+    skeleton_url = "https://github.com/vision-it/vision-skeleton"
+    repo_git_path = os.path.join(os.getcwd(), directoryname, '.git')
+    new_remote_url = 'git@github.com:vision-it/' + githubname + '.git'
 
-    # Pulling the skeleton from git
-    print("Cloning Puppet Profile Skeleton...")
-    repo = pull('https://github.com/vision-it/vision-skeleton', foldername)
+    print("> Cloning Puppet Profile Skeleton...")
+    subprocess.run(["git", "clone", skeleton_url, directoryname], check=False)
 
-    repo_git_path = os.path.join(os.getcwd() ,foldername, '.git')
-    remote_url = 'git@github.com:vision-it/' + githubname + '.git'
-
-    # Remove git path to remove previous commits
+    print("> Removing .git directory to remove history...")
     shutil.rmtree(repo_git_path)
 
-    # Init and checkout branch
-    git.Repo.init(os.path.join(os.getcwd(), foldername), bare=False)
-    repo.git.checkout(b="development")
-
-    # Add remove
-    repo.git.remote('add', 'origin', remote_url)
+    print("> Initializing new Profile...")
+    subprocess.run(["git", "init", directoryname],
+                   check=False)
+    subprocess.run(["git", "checkout", "-b", "development"], cwd=directoryname,
+                   check=False)
+    subprocess.run(["git", "remote", "add", "origin", new_remote_url], cwd=directoryname,
+                   check=False)
 
     # Changing the template marker in the files
-    files = get_files(foldername)
-    for f in files:
-        replace_marker(f, profilename_without_prefix)
+    files = get_files(directoryname)
+    for _files in files:
+        replace_marker(_files, profilename_without_prefix)
 
-
+    print("---------------------------------")
     print("Profile: " + profilename)
-    print("Skeleton cloned to: " + foldername)
-    print("Github origin name: " + remote_url)
+    print("Skeleton cloned to: " + directoryname)
+    print("Github origin name: " + new_remote_url)
 
 
 if __name__ == '__main__':
-    name, gitname, folder = commandline()
-    main(name, gitname, folder)
+    name, gitname, directory = commandline()
+    main(name, gitname, directory)

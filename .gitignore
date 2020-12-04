@@ -1,7 +1,11 @@
-#Python
+# Python
 .cache/
 __pycache__/
 .venv/
+.coverage
+
+# Clones
+vision-*/
 
 # VIM files
 *.swp

@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
 
-import pytest
+"""
+Tests for CLI
+"""
+
 import importlib
-import re
 import os
+import re
 import shutil
 import tempfile
+import pytest
+
 #Dirty fix, since we're not a module
 gen = importlib.import_module('profile-generate')
 
 
 @pytest.fixture(scope='session')
 def tmpdir(request):
+    """
+    Test directory fixture
+    """
 
     tmpdir = tempfile.mkdtemp(suffix='pytest')
 
@@ -23,6 +31,9 @@ def tmpdir(request):
 
 @pytest.fixture
 def files(request):
+    """
+    Test files fixture
+    """
 
     # This will contain:
     # Filename and expected value
@@ -52,7 +63,7 @@ def test_main(tmpdir, files):
     foldername = tmpdir + '/vision-test'
 
     # Execute main function from generator
-    gen.main(profilename, foldername=foldername)
+    gen.main(profilename, directoryname=foldername)
 
     # Assert for every file
     for filename, expected in files.items():

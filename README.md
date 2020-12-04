@@ -4,16 +4,6 @@
 
 Uses the vision-skeleton Puppet Profile to generate a new Puppet Profile with the given name.
 
-## Setup
-
-```bash
-# Use virtual environment
-$ pyvenv .venv
-$ source .venv/bin/activate
-
-$ pip3 install -r requirements.txt
-```
-
 ## Usage
 
 ```bash
@@ -25,4 +15,20 @@ You can also specify the name of the local folder and the name of the repository
 
 ```bash
 $ python3 profile-generate.py --name profilename --github vision-othername --folder myfolder
+```
+
+## Development
+
+```bash
+# Use virtual environment
+$ pyvenv .venv
+$ source .venv/bin/activate
+
+$ pip3 install -r requirements.txt
+```
+
+```
+make lint
+make test
+make coverage
 ```
